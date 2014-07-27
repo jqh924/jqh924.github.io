@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://jqh924.github.io/atom.xml" rel="self"/>
   <link href="http://jqh924.github.io/"/>
-  <updated>2014-07-24T17:46:59+08:00</updated>
+  <updated>2014-07-27T12:18:08+08:00</updated>
   <id>http://jqh924.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -18,7 +18,9 @@
     <link href="http://jqh924.github.io/blog/2014/07/24/hello/"/>
     <updated>2014-07-24T17:40:04+08:00</updated>
     <id>http://jqh924.github.io/blog/2014/07/24/hello</id>
-    <content type="html"><![CDATA[<p>Hello 好</p>
+    <content type="html"><![CDATA[<p>捣腾许久，跌跌撞撞，终于弄好了octopress并且部署到了github_pages上，此刻万分感谢Tuo兄的指点帮助。Tuo兄一直于我强调作为一个程序员，写技术博客的重要性。我非常认同，进取、积累、乐于分享是程序员应具备的素质、品行。
+工作将近4年，遇到过不少问题，有的解决，有的至今未解决，有具体到某个框架的功能如何配置的问题，也有形而上的对于这4年工作经历中对于软件开发方法、团队协作等问题的看法，我都会一一记录下来。
+那先从哪个开始呢？我觉得还是遵循就近原则吧。最近在做的事情中，让我开始重新审视自己的编写sql的水平，于是翻开了《Oracle SQL高级编程》一书，下一篇我会摘录一些到目前为止我看到的觉得有意义的知识点，并结合实际当中碰到的问题来讲一讲。</p>
 ]]></content>
   </entry>
   
