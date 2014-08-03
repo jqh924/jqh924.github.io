@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://jqh924.github.io/atom.xml" rel="self"/>
   <link href="http://jqh924.github.io/"/>
-  <updated>2014-08-03T17:21:25+08:00</updated>
+  <updated>2014-08-04T01:46:12+08:00</updated>
   <id>http://jqh924.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -24,10 +24,86 @@
   
   <entry>
     <title type="html"><![CDATA[JAVA NIO and Epoll]]></title>
-    <link href="http://jqh924.github.io/blog/2014/08/03/java-nio-and-epoll/"/>
+    <link href="http://jqh924.github.io/blog/2014/08/03/epoll/"/>
     <updated>2014-08-03T17:19:08+08:00</updated>
-    <id>http://jqh924.github.io/blog/2014/08/03/java-nio-and-epoll</id>
-    <content type="html"><![CDATA[
+    <id>http://jqh924.github.io/blog/2014/08/03/epoll</id>
+    <content type="html"><![CDATA[<p>学习、了解Rails的时候，有次翻到了这篇文章
+<a href="http://robbinfan.com/blog/40/ruby-off-rails">http://robbinfan.com/blog/40/ruby-off-rails</a>，
+其中谈到了rails作为高并发量WebService服务框架的时候暴露出的性能上的问题，并列举了商业社交网站Linkedin的事例，说明了Rails的一些问题，同时还给出了量化的测试数据，Rails比对的对象是node.js与Go。主要结论是Rails的调用堆栈过深，以及所采用的IO模型不合适，导致了其在处理高并发量的网络IO时捉襟见肘。其中提到了一点：</p>
+
+<blockquote><p>纤程IO模型的性能是传统多进程模型的3-4倍，而Event IO则是多进程的6-7倍。值得一提的是Ruby的Event IO框架Cramp甚至性能超过了node.js。</p></blockquote>
+
+<p>对于阻塞IO、非阻塞IO、同步、异步一直都没有彻底弄清楚各自的概念，借此机会就好好地学习一下：
+<a href="http://baike.baidu.com/view/2877739.htm">http://baike.baidu.com/view/2877739.htm</a>从这里面看,Linux内核中所使用的</p>
+
+<pre><code>- select
+
+
+- poll
+
+
+- epoll
+</code></pre>
+
+<p>都是一些IO模型。简单概括下：
+select与poll的本质是一样的，都以遍历、轮询的方式来处理所关注的文件描述符集合，检查每个集合中的文件描述符上是否有相应的事件发生，如果有则处理，代码的结构类似于下面这样：
+&lt;% codeblock%>
+while (true) {</p>
+
+<pre><code>select/poll(file_descriptors[])
+for i in file_descriptors[] {
+    if (i has some_events_happened)
+    read()
+}
+</code></pre>
+
+<p>}
+&lt;%endbloc%></p>
+
+<p>select/poll本身是<strong>可以</strong>阻塞当前的程序的，阻塞之后，当有IO事件发生，则select/poll会被唤醒，轮询所监视的文件描述符列表，然后把数据从内核空间复制到用户空间里，供应用程序使用。这个模型比起阻塞IO那种模型，(即：在一个线程里，只能等待某一个IO对象的事件（IO中断），否则就一直阻塞，直到等待的事件产生)的进步之处在于，在一个线程中，可以处理更多的IO对象了，也因此这种机制被称为IO复用。
+不难发现，这个轮询机制在监视的文件描述符列表很长、且其中的监视对象活跃度不高的时候，可能会导致性能上的急剧下降，因为每次都要遍历一遍这个列表，并且，当用户态的程序将这个列表传递给内核函数的时候，不可避免地要进行一次从用户控件->内核空间的数据复制，当列表很庞大时，这笔开销是无法忽视的。另外，select/poll在创建文件描述符列表时，是有数量限制的。</p>
+
+<p>再来看看epoll这个模型：
+epoll本质上仍旧是一种io复用，即在一个线程中，处理多个IO对象的事件。但是他采用的不是轮询的机制，而是采用了“Event Driven”的方式，即在创建需要监视的文件描述符列表的同时，为每个文件描述符注册一个回调函数，事件发生之后，由内核调用其对应的回调函数，进行注册，最后返回所有注册的文件描述符。</p>
+
+<p>到这里，epoll与select/poll的比较已经很明显了，原理上的差异可以概括为：
+他们同样是用一个线程去处理，最终要返回一个file descrpitor的集合，但是哪些元素应该进入这个集合呢？在获得这些元素的时候采取的策略不同，select/poll采取遍历轮询逐个检查元素是否符合条件，epoll采取注册回调函数，只有符合条件的元素的回调函数才会被调用，然后被加入集合。
+同时，还有一个差异不能忽视，epoll模型在底层实现上用了mmap，用以减少在用户空间与内核空间之间的数据复制开销。
+详细的话，请戳这篇<a href="http://www.cnblogs.com/apprentice89/p/3234677.html">http://www.cnblogs.com/apprentice89/p/3234677.html</a>另外，epoll有2种触发模式，暂且不讨论。</p>
+
+<p>Node.js官网</p>
+
+<blockquote><p>Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.</p></blockquote>
+
+<p>最后，需要回答一下的是开篇对于阻塞IO、非阻塞IO、同步、异步的疑问:</p>
+
+<p>阻塞与非阻塞的差异体现在，当数据读取不到的时候</p>
+
+<pre><code>阻塞IO：程序等待，进程的状态会变为blocked（具体如何实现，目前还不清楚）,也就意味着移出执行队列，让出CPU资源，直到数据到来，产生事件，被唤醒，即从blocked变为就绪状态(ready),等待被调度进执行队列，获得CPU时间，完成未完成的操作。每个设备应该是有一个等待列表的，进程在被阻塞之前，会被加入到其所等待的设备的等待列表中。
+非阻塞IO：虽然读不到数据，但read()可以执行完，顺利返回，同时可能会带出一个表示执行结果的状态代码，然后程序可以干点别的。实际上可以想象，非阻塞的模式中，可以来一个while(true){},其中不停地去read()，然后判断状态代码，如果状态代码表示read成功则break。
+</code></pre>
+
+<p>   我之前混淆了进程调度机制。阻塞模式，相当于是主动放弃CPU给予他的时间片，等待相应的IO事件将其唤醒，而非阻塞模式则是“贪婪地”用完它所有的CPU时间片。</p>
+
+<p>   同步与异步：
+   好吧，我觉得&#8221;何谓同步与异步&#8221;这个问题在这个地方本身就是很奇怪的，因为没有这样从这个角度去分类IO模型。
+   <a href="http://blog.csdn.net/historyasamirror/article/details/5778378">http://blog.csdn.net/historyasamirror/article/details/5778378</a>
+   参见这位老兄的帖子，首先我对阻塞IO与非阻塞IO的理解是正确的。
+   最后还是引用这位老兄的解释来回答我的问题，我觉得这个解释很清楚了。</p>
+
+<blockquote><p>在说明synchronous IO和asynchronous IO的区别之前，需要先给出两者的定义。Stevens给出的定义（其实是POSIX的定义）是这样子的：</p>
+
+<pre><code>A synchronous I/O operation causes the requesting process to be blocked until that I/O operation completes;
+An asynchronous I/O operation does not cause the requesting process to be blocked; 
+</code></pre>
+
+<p>两者的区别就在于synchronous IO做”IO operation”的时候会将process阻塞。按照这个定义，之前所述的blocking IO，non-blocking IO，IO multiplexing都属于synchronous IO。有人可能会说，non-blocking IO并没有被block啊。这里有个非常“狡猾”的地方，定义中所指的”IO operation”是指真实的IO操作，就是例子中的recvfrom这个system call。non-blocking IO在执行recvfrom这个system call的时候，如果kernel的数据没有准备好，这时候不会block进程。但是，当kernel中数据准备好的时候，recvfrom会将数据从kernel拷贝到用户内存中，这个时候进程是被block了，在这段时间内，进程是被block的。而asynchronous IO则不一样，当进程发起IO 操作之后，就直接返回再也不理睬了，直到kernel发送一个信号，告诉进程说IO完成。在这整个过程中，进程完全没有被block。</p></blockquote>
+
+<p> <img src="http://jqh924.github.io/images/io1.jpg"></p>
+
+<p>经过上面的介绍，会发现non-blocking IO和asynchronous IO的区别还是很明显的。在non-blocking IO中，虽然进程大部分时间都不会被block，但是它仍然要求进程去主动的check，并且当数据准备完成以后，也需要进程主动的再次调用recvfrom来将数据拷贝到用户内存。而asynchronous IO则完全不同。它就像是用户进程将整个IO操作交给了他人（kernel）完成，然后他人做完后发信号通知。在此期间，用户进程不需要去检查IO操作的状态，也不需要主动的去拷贝数据。</p>
+
+<p>  写了那么多，很想亲自尝试一下node.js看看这玩样的威力。另外，java nio实际也是借鉴了epoll的这种模型，后面可以来谈谈java nio中实现io的代码的变化。</p>
 ]]></content>
   </entry>
   
