@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://jqh924.github.io/atom.xml" rel="self"/>
   <link href="http://jqh924.github.io/"/>
-  <updated>2014-07-27T12:18:08+08:00</updated>
+  <updated>2014-08-03T16:47:32+08:00</updated>
   <id>http://jqh924.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -14,13 +14,54 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Hello]]></title>
-    <link href="http://jqh924.github.io/blog/2014/07/24/hello/"/>
-    <updated>2014-07-24T17:40:04+08:00</updated>
-    <id>http://jqh924.github.io/blog/2014/07/24/hello</id>
-    <content type="html"><![CDATA[<p>捣腾许久，跌跌撞撞，终于弄好了octopress并且部署到了github_pages上，此刻万分感谢Tuo兄的指点帮助。Tuo兄一直于我强调作为一个程序员，写技术博客的重要性。我非常认同，进取、积累、乐于分享是程序员应具备的素质、品行。
-工作将近4年，遇到过不少问题，有的解决，有的至今未解决，有具体到某个框架的功能如何配置的问题，也有形而上的对于这4年工作经历中对于软件开发方法、团队协作等问题的看法，我都会一一记录下来。
-那先从哪个开始呢？我觉得还是遵循就近原则吧。最近在做的事情中，让我开始重新审视自己的编写sql的水平，于是翻开了《Oracle SQL高级编程》一书，下一篇我会摘录一些到目前为止我看到的觉得有意义的知识点，并结合实际当中碰到的问题来讲一讲。</p>
+    <title type="html"><![CDATA[Bao Management Visual System]]></title>
+    <link href="http://jqh924.github.io/blog/2014/08/03/bao-management-visual-system/"/>
+    <updated>2014-08-03T16:38:25+08:00</updated>
+    <id>http://jqh924.github.io/blog/2014/08/03/bao-management-visual-system</id>
+    <content type="html"><![CDATA[<p><img src="http://jqh924.github.io/images/bmvp1.png">
+<img src="http://jqh924.github.io/images/bmvp2.png">
+<img src="http://jqh924.github.io/images/bmvp3.png"></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Android Development]]></title>
+    <link href="http://jqh924.github.io/blog/2014/08/02/android-development/"/>
+    <updated>2014-08-02T18:37:07+08:00</updated>
+    <id>http://jqh924.github.io/blog/2014/08/02/android-development</id>
+    <content type="html"><![CDATA[<p>AndroidManifest.xml</p>
+
+<pre><code>用于描述app的基本特征，并且定义了APP所包含的每个组件(components).
+在manifest其中最重要之一的元素就是&lt;uses-sdk&gt;，这个元素声明了app在不通Android版本之间的兼容性，通过android:minSdkVersion和android:targetSdkVersion2个属性
+&lt;% codeblock %&gt;
+    &lt;manifest xmlns:android="http://schemas.android.com/apk/res/android" ... &gt;
+&lt;uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" /&gt;
+...
+&lt;/manifest&gt;
+&lt;% end%&gt;
+</code></pre>
+
+<p>src/</p>
+
+<pre><code>默认包含一个Activity class,当点击app图标启动该APP的时候运行
+</code></pre>
+
+<p>res/</p>
+
+<pre><code>drawable-hdpi/
+layout/
+    Directory for files that define your app's user interface.
+values/
+    Directory for other various XML files that contain a collection of resources, such as string and color definitions.
+</code></pre>
+
+<p>在真实设备上调试:</p>
+
+<pre><code>在windows平台上开发的话，有可能需要安装合适的USB驱动
+在真实设备上允许“USB调试”，此选项在安卓3.2版本或以下在这个路径中设置：Settings&gt;Applications&gt;Development
+在安卓4.0或以上版本中，这个路径变为Settings&gt;Develop options
+注意：在安卓4.2或以上的版本中，Develop options这个选项默认是隐藏的，需要通过以下方式来显示：Settings&gt;About Phone,然后点击Build Number7次，然后再返回前一个界面就能看到被隐藏的Develop options。
+</code></pre>
 ]]></content>
   </entry>
   
