@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://jqh924.github.io/atom.xml" rel="self"/>
   <link href="http://jqh924.github.io/"/>
-  <updated>2014-08-03T16:47:32+08:00</updated>
+  <updated>2014-08-03T16:50:00+08:00</updated>
   <id>http://jqh924.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -26,9 +26,9 @@
   
   <entry>
     <title type="html"><![CDATA[Android Development]]></title>
-    <link href="http://jqh924.github.io/blog/2014/08/02/android-development/"/>
+    <link href="http://jqh924.github.io/blog/2014/08/02/android-development.bak/"/>
     <updated>2014-08-02T18:37:07+08:00</updated>
-    <id>http://jqh924.github.io/blog/2014/08/02/android-development</id>
+    <id>http://jqh924.github.io/blog/2014/08/02/android-development.bak</id>
     <content type="html"><![CDATA[<p>AndroidManifest.xml</p>
 
 <pre><code>用于描述app的基本特征，并且定义了APP所包含的每个组件(components).
