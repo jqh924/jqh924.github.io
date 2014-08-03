@@ -104,74 +104,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/02/android-development.bak/">Android Development</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-02T18:37:07+08:00" pubdate data-updated="true">Aug 2<sup>nd</sup>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>AndroidManifest.xml</p>
-
-<pre><code>用于描述app的基本特征，并且定义了APP所包含的每个组件(components).
-在manifest其中最重要之一的元素就是&lt;uses-sdk&gt;，这个元素声明了app在不通Android版本之间的兼容性，通过android:minSdkVersion和android:targetSdkVersion2个属性
-&lt;% codeblock %&gt;
-    &lt;manifest xmlns:android="http://schemas.android.com/apk/res/android" ... &gt;
-&lt;uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" /&gt;
-...
-&lt;/manifest&gt;
-&lt;% end%&gt;
-</code></pre>
-
-<p>src/</p>
-
-<pre><code>默认包含一个Activity class,当点击app图标启动该APP的时候运行
-</code></pre>
-
-<p>res/</p>
-
-<pre><code>drawable-hdpi/
-layout/
-    Directory for files that define your app's user interface.
-values/
-    Directory for other various XML files that contain a collection of resources, such as string and color definitions.
-</code></pre>
-
-<p>在真实设备上调试:</p>
-
-<pre><code>在windows平台上开发的话，有可能需要安装合适的USB驱动
-在真实设备上允许“USB调试”，此选项在安卓3.2版本或以下在这个路径中设置：Settings&gt;Applications&gt;Development
-在安卓4.0或以上版本中，这个路径变为Settings&gt;Develop options
-注意：在安卓4.2或以上的版本中，Develop options这个选项默认是隐藏的，需要通过以下方式来显示：Settings&gt;About Phone,然后点击Build Number7次，然后再返回前一个界面就能看到被隐藏的Develop options。
-</code></pre>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -186,10 +118,6 @@ values/
     
       <li class="post">
         <a href="/blog/2014/08/03/bao-management-visual-system/">Bao Management Visual System</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/02/android-development.bak/">Android Development</a>
       </li>
     
   </ul>
