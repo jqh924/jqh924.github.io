@@ -150,19 +150,16 @@
 </code></pre>
 
 <p>都是一些IO模型。简单概括下：
-select与poll的本质是一样的，都以遍历、轮询的方式来处理所关注的文件描述符集合，检查每个集合中的文件描述符上是否有相应的事件发生，如果有则处理，代码的结构类似于下面这样：
-&lt;% codeblock%>
-while (true) {</p>
+select与poll的本质是一样的，都以遍历、轮询的方式来处理所关注的文件描述符集合，检查每个集合中的文件描述符上是否有相应的事件发生，如果有则处理，代码的结构类似于下面这样：</p>
 
-<pre><code>select/poll(file_descriptors[])
-for i in file_descriptors[] {
-    if (i has some_events_happened)
-    read()
+<pre><code>while (true) {
+    select/poll(file_descriptors[])
+    for i in file_descriptors[] {
+        if (i has some_events_happened)
+        read()
+    }
 }
 </code></pre>
-
-<p>}
-&lt;%endbloc%></p>
 
 <p>select/poll本身是<strong>可以</strong>阻塞当前的程序的，阻塞之后，当有IO事件发生，则select/poll会被唤醒，轮询所监视的文件描述符列表，然后把数据从内核空间复制到用户空间里，供应用程序使用。这个模型比起阻塞IO那种模型，(即：在一个线程里，只能等待某一个IO对象的事件（IO中断），否则就一直阻塞，直到等待的事件产生)的进步之处在于，在一个线程中，可以处理更多的IO对象了，也因此这种机制被称为IO复用。
 不难发现，这个轮询机制在监视的文件描述符列表很长、且其中的监视对象活跃度不高的时候，可能会导致性能上的急剧下降，因为每次都要遍历一遍这个列表，并且，当用户态的程序将这个列表传递给内核函数的时候，不可避免地要进行一次从用户控件->内核空间的数据复制，当列表很庞大时，这笔开销是无法忽视的。另外，select/poll在创建文件描述符列表时，是有数量限制的。</p>
